@@ -1,0 +1,42 @@
+import requests
+from bs4 import BeautifulSoup
+import json
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+
+airport = pd.read_csv('C:/users/chuboy/desktop/MRT/airport.csv')
+house_price = pd.read_csv('C:/users/chuboy/desktop/tpe_house.csv')
+mrt_df = pd.read_csv('C:/users/chuboy/desktop/MRT/tpe_metro.csv',encoding='big5')
+mrt_st = pd.read_csv('C:/users/chuboy/desktop/MRT/mrt_st.csv')[['station_name_tw','line_name','address']]
+tyu = pd.read_csv('C:/users/chuboy/desktop/MRT/tyu_metro.csv')
+tyu.vol = tyu.vol.apply(lambda x:x.replace(',',''))
+tyu.vol = tyu.vol.astype(int)
+tyu = tyu.rename(columns={'vol':'tyu_vol'})
+mrt_st.columns=['station','line','addr']
+mrt_st.addr = mrt_st.addr.str[3:6]
+mrt_st.head()
+
+df = pd.merge(mrt_df,mrt_st,on='station',how='left')
+df = pd.merge(df,house_price,on='station',how='left')
+df = df.loc[df.date>'2017-03-01']
+
+df.date = df.date.astype(str)
+airport.date = airport.date.astype(str)
+df = pd.merge(df,airport,on='date',how='left')
+
+df.vol = df.vol.astype(int)
+df.loc[df.price=='指定範圍內無成交紀錄','price'] = np.nan
+df.price = df.price.astype(float)
+
+tyu.date = tyu.date.astype(str)
+df = pd.merge(df,tyu.drop('weekday',axis=1),on='date',how='left')
+
+
+s_plot = sns.boxplot(x='weekday',y='tyu_vol',data=tyu)
+plt.title('桃園機捷運量分布')
+plt.xlabel('星期幾')
+plt.ylabel('運量')
+s_plot.figure.savefig('C:/users/chuboy/desktop/桃園機捷運量分布.png')
