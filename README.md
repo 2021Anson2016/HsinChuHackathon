@@ -11,10 +11,10 @@
   桃園機場運量
   http://www.taoyuanairport.com.tw/company_ch/NewPassengerQuery
   2016年房價統計
+  http://tradeinfo.sinyi.com.tw/metro/stationDetail.html?m=181
   http://tradeinfo.sinyi.com.tw/metro/json/2016.json
   桃園機捷運量
   https://www.tymetro.com.tw/cht/index.php?code=list&ids=156
-  http://tradeinfo.sinyi.com.tw/metro/stationDetail.html?m=181
   捷運演進
   http://data.but.tw/trtc/
 
